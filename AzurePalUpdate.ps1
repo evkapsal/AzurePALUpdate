@@ -193,16 +193,40 @@ Try
 	{
 	Write-Host -ForegroundColor Yellow -BackgroundColor Black "Trying to Update Partner Account Link..."
 	
-		Update-AzManagementPartner -PartnerId $MPNID
+	$palexist = get-AzManagementPartner -ErrorAction SilentlyContinue
+	if (!$palexist)
+	{
+		Write-Host -ForegroundColor Yellow -BackgroundColor Black "There is no exisiting Partner registration in this Subscription"
+		New-AzManagementPartner -PartnerId $($MPNID)
 	}
+	else
+	{
+		Write-Host -ForegroundColor Red -BackgroundColor Black "Found an exisiting Partner registration in this Subscription"
+		
+		$Message = "Press Continue to Update Partner registration Link in this Subscription"
+		$Title = "Continue or Cancel"
+		Add-Type -AssemblyName System.Windows.Forms | Out-Null
+		$MsgBox = [System.Windows.Forms.MessageBox]
+		$Decision = $MsgBox::Show($Message, $Title, "OkCancel", "Information")
+		If ($Decision -eq "Cancel")
+		{
+			exit
+		}
+		else
+		{
+			Update-AzManagementPartner -PartnerId $($MPNID)
+		}
+	}
+	
+}
 Catch
-	{
-		$ErrorMessage = $_.Exception.Message
-		Write-Error "Somethink Wrong Happened with PAL Registration.Details: $($ErrorMessage)"
-		exit
-	}
+{
+	$ErrorMessage = $_.Exception.Message
+	Write-Error "Somethink Wrong Happened with PAL Registration.Details: $($ErrorMessage)"
+	exit
+}
 Finally
-	{
-		Write-Host -ForegroundColor Yellow -BackgroundColor Black "You have succesfully update your Partner Account Link"
-	}
+{
+	Write-Host -ForegroundColor Yellow -BackgroundColor Black "You have succesfully update your Partner Account Link"
+}
 
