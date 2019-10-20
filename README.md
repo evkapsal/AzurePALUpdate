@@ -36,7 +36,7 @@ Also there is step by step guide on how your can update PAL from Azure Portal or
 
 Below there is an example on how the script is taking actions in order to update the PAL.
 
-![](https://github.com/evkapsal/AzurePALUpdate/blob/master/Pal.PNG)
+![](https://github.com/evkapsal/AzurePALUpdate/blob/master/Pal.PNG?raw=true)
 
 
 ## Authors
